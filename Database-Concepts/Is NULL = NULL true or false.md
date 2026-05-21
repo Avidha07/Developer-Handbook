@@ -1,0 +1,182 @@
+# "Is NULL = NULL true or false in SQL — and why?"
+
+# 🔮 NULL = NULL — The Answer That Gets You Hired
+
+> 95% of candidates say *"True."*
+> Senior devs talk about **Three-Valued Logic** and **UNKNOWN.**
+> That one word is what gets you selected.
+
+---
+
+## ❌ What 95% of Candidates Say
+
+> "NULL = NULL is True."
+
+**Result:** Interviewer writes something down. You don't get selected. 💀
+
+---
+
+## ✅ The Correct Answer
+
+> **NULL = NULL is neither True nor False. It is `UNKNOWN`.**
+
+---
+
+## 1️⃣ What NULL Actually Means
+
+- NULL means **"no value"** or **"unknown"**
+- NOT zero
+- NOT empty string `""`
+- NOT `false`
+- The value simply **does not exist**
+
+> How can `unknown = unknown` be `true`?
+> You don't know what it is! 🧠
+
+---
+
+## 2️⃣ Proof in SQL
+
+```sql
+-- Returns ZERO rows. Always.
+SELECT * FROM users WHERE NULL = NULL;
+
+-- Returns ZERO rows too
+SELECT * FROM users WHERE NULL = 1;
+
+-- Returns ZERO rows even with !=
+SELECT * FROM users WHERE NULL != NULL;
+```
+
+All of these return nothing — because any comparison with NULL evaluates to **UNKNOWN**, never TRUE.
+
+---
+
+## 3️⃣ The Correct Way to Check NULL
+
+```sql
+-- ❌ WRONG — returns nothing, ever
+SELECT * FROM users WHERE email = NULL;
+
+-- ✅ CORRECT
+SELECT * FROM users WHERE email IS NULL;
+
+-- ✅ CORRECT
+SELECT * FROM users WHERE email IS NOT NULL;
+```
+
+> **Rule:** Never use `=` for NULL. Always use `IS NULL` or `IS NOT NULL`.
+
+---
+
+## 4️⃣ Three-Valued Logic in SQL — What 99% Miss 💀
+
+SQL doesn't operate on just `TRUE` / `FALSE`.
+
+It has **three** truth values:
+
+| Value | Meaning |
+|---|---|
+| `TRUE` | Condition is satisfied |
+| `FALSE` | Condition is not satisfied |
+| `UNKNOWN` | Cannot be determined (involves NULL) |
+
+```
+Any comparison involving NULL → UNKNOWN
+Any arithmetic involving NULL  → NULL
+
+NULL = NULL     → UNKNOWN
+NULL != NULL    → UNKNOWN
+NULL > 0        → UNKNOWN
+NULL + 1        → NULL
+1 = 1           → TRUE
+1 = 2           → FALSE
+```
+
+> **This is called Three-Valued Logic.**
+> 99% of candidates never mention this. That's exactly why they don't get selected. 🧠
+
+---
+
+## 5️⃣ The Real Interview Trap
+
+```sql
+-- Table: users
+-- age values: 22, 25, NULL
+
+SELECT * FROM users WHERE age != 25;
+```
+
+**What most devs expect:** rows with age 22 and NULL
+**What actually returns:** only age 22
+
+**Why?**
+
+```
+NULL != 25  →  UNKNOWN  →  row is NOT returned
+```
+
+> WHERE clause only returns rows where the condition is **TRUE**.
+> UNKNOWN rows are silently excluded. Most devs debug this for hours. 😭
+
+---
+
+## ⚡ The Answer That Gets You Selected
+
+> *"NULL = NULL evaluates to **UNKNOWN**, not TRUE, because NULL represents an absent or unknown value — it's not zero, not empty string, just missing. SQL uses **Three-Valued Logic** — TRUE, FALSE, and UNKNOWN. Any comparison or arithmetic with NULL always returns UNKNOWN, which is why you must use `IS NULL` instead of `= NULL`. This also means `WHERE col != value` silently excludes NULL rows, a common production bug."*
+
+---
+
+## 🧠 NULL Behaviour Cheat Sheet
+
+```sql
+-- Comparisons
+NULL = NULL      → UNKNOWN
+NULL != NULL     → UNKNOWN
+NULL = 0         → UNKNOWN
+NULL = ''        → UNKNOWN
+
+-- Arithmetic
+NULL + 1         → NULL
+NULL * 100       → NULL
+NULL || 'text'   → NULL  (in some DBs)
+
+-- Correct NULL checks
+col IS NULL      → TRUE  (if col is NULL)
+col IS NOT NULL  → TRUE  (if col is not NULL)
+
+-- Aggregates (surprise!)
+COUNT(*)         → counts NULL rows
+COUNT(col)       → EXCLUDES NULL rows  ← another interview trap!
+SUM(col)         → IGNORES NULLs
+AVG(col)         → IGNORES NULLs (denominator excludes NULLs too)
+```
+
+---
+
+## 🎯 Bonus: Common NULL Interview Traps
+
+| Trap | Expectation | Reality |
+|---|---|---|
+| `WHERE age != 25` | Returns NULLs too | NULL rows excluded |
+| `NULL = NULL` | TRUE | UNKNOWN |
+| `COUNT(col)` | Counts everything | Skips NULLs |
+| `WHERE email = NULL` | Filters NULLs | Returns nothing |
+| `NULL + 1` | 1 | NULL |
+
+---
+
+## 📚 Quick Reference: COALESCE & NULLIF
+
+```sql
+-- COALESCE: return first non-NULL value
+SELECT COALESCE(email, 'no email') FROM users;
+
+-- NULLIF: return NULL if two values are equal (avoids divide-by-zero)
+SELECT total / NULLIF(quantity, 0) FROM orders;
+```
+
+---
+
+> *"Three-Valued Logic — that's the answer 99% of candidates never say.*
+> *That's exactly why they don't get selected."* 🧠
