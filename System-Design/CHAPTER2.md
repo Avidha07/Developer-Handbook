@@ -1,81 +1,150 @@
-# Chapter 2: Important Formulas
+# Chapter 2: Back-of-the-Envelope Estimation — Important Formulas
+
+A quick-reference cheat sheet for the estimation formulas used in system design interviews: QPS, DAU, storage, availability, and unit conversions.
+
+## Table of Contents
+
+- [The 5 Formulas to Memorize First](#the-5-formulas-to-memorize-first)
+- [1. QPS (Queries Per Second)](#1-qps-queries-per-second)
+- [2. DAU (Daily Active Users)](#2-dau-daily-active-users)
+- [3. Storage Estimation](#3-storage-estimation)
+- [4. Media Storage (Twitter-like Example)](#4-media-storage-twitter-like-example)
+- [5. Availability and Downtime](#5-availability-and-downtime)
+- [6. Data Unit Conversions](#6-data-unit-conversions)
+- [7. Latency Unit Conversions](#7-latency-unit-conversions)
+- [Interview Tip](#interview-tip)
+
+---
+
+## The 5 Formulas to Memorize First
+
+| # | Formula | Expression |
+|---|---------|------------|
+| 1 | Average QPS | $\text{Daily Requests} \div 86{,}400$ |
+| 2 | Peak QPS | $\text{Average QPS} \times \text{Peak Multiplier}$ |
+| 3 | Daily Storage | $\text{Items per Day} \times \text{Size per Item}$ |
+| 4 | Storage Over Time | $\text{Daily Storage} \times \text{Number of Days}$ |
+| 5 | Annual Downtime | $8{,}760 \times (1 - \text{Availability Decimal})$ hours |
+
+---
 
 ## 1. QPS (Queries Per Second)
 
-**Total Daily Requests**
+**Total daily requests**
 
-`Daily Requests = DAU × Requests per User per Day`
+$$
+\boxed{\text{Daily Requests} = \text{DAU} \times \text{Requests per User per Day}}
+$$
 
 **Average QPS**
 
-`Average QPS = Daily Requests / 86,400`
+$$
+\boxed{\text{Average QPS} = \frac{\text{Daily Requests}}{86{,}400}}
+$$
 
-Remember: 1 day = 86,400 seconds.
+> **Remember:** 1 day = 86,400 seconds.
 
 **Peak QPS**
 
-`Peak QPS = Average QPS × Peak Multiplier`
+$$
+\boxed{\text{Peak QPS} = \text{Average QPS} \times \text{Peak Multiplier}}
+$$
 
-Example: If average QPS = 4,000 and the peak multiplier is 3:
+**Example:** If average QPS = 4,000 and the peak multiplier is 3, then peak QPS = **12,000**.
 
-`Peak QPS = 4,000 × 3 = 12,000`
+---
 
 ## 2. DAU (Daily Active Users)
 
 If you know Monthly Active Users (MAU) and the percentage active daily:
 
-`DAU = MAU × Daily Active Percentage`
+$$
+\boxed{\text{DAU} = \text{MAU} \times \text{Daily Active Percentage}}
+$$
 
-Example: 300 million MAU, with 50% active daily:
+**Example:** 300 million MAU, with 50% active daily:
 
-`DAU = 300M × 0.5 = 150M`
+$$
+300M \times 0.5 = 150M \text{ DAU}
+$$
+
+---
 
 ## 3. Storage Estimation
 
-**Daily Storage**
+**Daily storage**
 
-`Daily Storage = Items per Day × Average Size per Item`
+$$
+\boxed{\text{Daily Storage} = \text{Items per Day} \times \text{Average Size per Item}}
+$$
 
-**Storage Over a Period**
+**Storage over a period**
 
-`Total Storage = Daily Storage × Number of Days`
+$$
+\boxed{\text{Total Storage} = \text{Daily Storage} \times \text{Number of Days}}
+$$
 
-Example: 20 TB/day for 365 days:
+**Example:** 20 TB/day for 365 days:
 
-`Total Storage = 20 × 365 = 7,300 TB = 7.3 PB`
+$$
+20 \times 365 = 7{,}300 \text{ TB} = 7.3 \text{ PB}
+$$
+
+---
 
 ## 4. Media Storage (Twitter-like Example)
 
 When only a percentage of posts contain media:
 
-`Daily Media Storage = DAU × Posts per User per Day × Media Percentage × Average Media Size`
+$$
+\boxed{
+\begin{aligned}
+\text{Daily Media Storage} ={}& \text{DAU} \times \text{Posts per User per Day} \\
+& \times \text{Media Percentage} \times \text{Average Media Size}
+\end{aligned}
+}
+$$
 
-Example:
+**Example from the chapter's assumptions:**
 
-`150M × 2 × 10% × 1 MB = 30 TB/day`
+$$
+150M \times 2 \times 10\% \times 1 \text{ MB} = 30 \text{ TB/day}
+$$
+
+---
 
 ## 5. Availability and Downtime
 
-**Downtime Percentage**
+**Downtime percentage**
 
-`Downtime % = 100% - Availability %`
+$$
+\boxed{\text{Downtime \%} = 100\% - \text{Availability \%}}
+$$
 
-**Annual Downtime**
+**Annual downtime**
 
-`Downtime = Total Time × (1 - Availability as a Decimal)`
+$$
+\boxed{\text{Downtime} = \text{Total Time} \times (1 - \text{Availability as a Decimal})}
+$$
 
 For a year:
 
-`Total Time = 365 × 24 = 8,760 hours`
+$$
+\text{Total Time} = 365 \times 24 = 8{,}760 \text{ hours}
+$$
 
-Example: 99.9% availability:
+**Example:** 99.9% availability:
 
-`Downtime = 8,760 × (1 - 0.999) = 8.76 hours`
+$$
+8{,}760 \times (1 - 0.999) = 8.76 \text{ hours}
+$$
+
+---
 
 ## 6. Data Unit Conversions
 
-| Unit | Approximate Conversion |
-|---|---|
+| Unit | Approximate conversion |
+|------|------------------------|
 | 1 byte | 8 bits |
 | 1 KB | 1,000 bytes |
 | 1 MB | 1,000 KB |
@@ -83,24 +152,22 @@ Example: 99.9% availability:
 | 1 TB | 1,000 GB |
 | 1 PB | 1,000 TB |
 
-**Note:** Binary units use multiples of 1,024 instead of 1,000. State your assumption when estimating storage.
+> **Note:** The book also discusses binary units, where each step is a power of 1,024. For quick capacity estimates, decimal rounding is often convenient — just state your assumption.
+
+---
 
 ## 7. Latency Unit Conversions
 
 | Unit | Equivalent |
-|---|---|
+|------|------------|
 | 1 millisecond (ms) | 1,000 microseconds (μs) |
 | 1 microsecond (μs) | 1,000 nanoseconds (ns) |
 | 1 second | 1,000 milliseconds |
 
-These conversions help compare cache, memory, disk, and network latency.
+These conversions help you compare cache, memory, disk, and network latency.
 
-## The 5 Formulas to Memorize First
+---
 
-1. **Average QPS:** Daily Requests / 86,400
-2. **Peak QPS:** Average QPS × Peak Multiplier
-3. **Daily Storage:** Items per Day × Size per Item
-4. **Storage Over Time:** Daily Storage × Number of Days
-5. **Annual Downtime:** 8,760 × (1 - Availability as a Decimal)
+## Interview Tip
 
-**Interview Tip:** Always state your assumptions, keep units consistent, and round estimates rather than getting stuck on exact arithmetic.
+> Always **state your assumptions**, **keep units consistent**, and **round** your estimates rather than getting stuck on exact arithmetic.
