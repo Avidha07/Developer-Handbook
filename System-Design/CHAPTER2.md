@@ -108,8 +108,10 @@ $$
 **Example from the chapter's assumptions:**
 
 $$
-150M \times 2 \times 10\% \times 1 \text{ MB} = 30 \text{ TB/day}
+150M \times 2 \times 0.1 \times 1 \text{ MB} = 30 \text{ TB/day}
 $$
+
+(10 percent of posts contain media, so the media percentage is 0.1.)
 
 ---
 
@@ -118,8 +120,10 @@ $$
 **Downtime percentage**
 
 $$
-\boxed{\text{Downtime \%} = 100\% - \text{Availability \%}}
+\boxed{\text{Downtime Percentage} = 100 - \text{Availability Percentage}}
 $$
+
+(Both values are expressed in percent, e.g. 100 − 99.9 = 0.1.)
 
 **Annual downtime**
 
