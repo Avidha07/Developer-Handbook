@@ -83,7 +83,7 @@ Downtime percentage
 
 $$
 \boxed{\text{Downtime \%}=100\%-\text{Availability \%}}
-$$ 
+$$
 
 Annual downtime
 
