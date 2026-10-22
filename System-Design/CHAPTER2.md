@@ -10,6 +10,7 @@ A quick-reference cheat sheet for the estimation formulas used in system design 
 - [3. Storage Estimation](#3-storage-estimation)
 - [4. Media Storage (Twitter-like Example)](#4-media-storage-twitter-like-example)
 - [5. Availability and Downtime](#5-availability-and-downtime)
+  - [Approximate Annual Downtime — Quick Revision](#approximate-annual-downtime--quick-revision)
 - [6. Data Unit Conversions](#6-data-unit-conversions)
 - [7. Latency Unit Conversions](#7-latency-unit-conversions)
 - [Interview Tip](#interview-tip)
@@ -142,6 +143,38 @@ $$
 $$
 8{,}760 \times (1 - 0.999) = 8.76 \text{ hours}
 $$
+
+### Approximate Annual Downtime — Quick Revision
+
+| Availability | Downtime per year |
+|--------------|-------------------|
+| 99% | 3.65 days |
+| 99.9% | 8.77 hours |
+| 99.99% | 52.6 minutes |
+| 99.999% | 5.26 minutes |
+
+**Formula**
+
+$$
+\text{Downtime} = \text{Total Time} \times (1 - \text{Availability})
+$$
+
+**For annual downtime in hours:**
+
+$$
+\boxed{8760 \times \left(1 - \frac{\text{Availability Percentage}}{100}\right)}
+$$
+
+> **Note:** The table uses an average year of 365.25 days, which is why 99.9% shows 8.77 hours. Using 8,760 hours (365 days) gives 8.76 hours. Both are fine for estimation.
+
+**Easy way to remember**
+
+- 99% → **Days**
+- 99.9% → **Hours**
+- 99.99% → **Minutes**
+- 99.999% → **About 5 minutes**
+
+> **Interview tip:** Every additional 9 in the availability percentage dramatically reduces the allowed downtime.
 
 ---
 
