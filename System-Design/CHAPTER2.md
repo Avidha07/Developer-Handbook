@@ -1,6 +1,6 @@
 # Chapter 2: Important Formulas
 
-## 1. QPS (Queries Per Second) 
+## 1. QPS (Queries Per Second)
 
 Total daily requests
 
